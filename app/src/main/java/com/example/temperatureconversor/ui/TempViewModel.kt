@@ -1,4 +1,4 @@
-package com.example.temperatureconversor.ui.theme.ui
+package com.example.temperatureconversor.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

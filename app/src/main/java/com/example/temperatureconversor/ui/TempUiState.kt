@@ -1,4 +1,4 @@
-package com.example.temperatureconversor.ui.theme.ui
+package com.example.temperatureconversor.ui
 
 data class TempUiState (
     val currentTemperature: String = "",

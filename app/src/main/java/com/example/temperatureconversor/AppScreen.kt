@@ -29,17 +29,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.temperatureconversor.ui.theme.TemperatureConversorTheme
-import com.example.temperatureconversor.ui.theme.ui.TempViewModel
+import com.example.temperatureconversor.ui.TempViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TempScreen(
     tempViewModel: TempViewModel = viewModel()
-){
+) {
     val tempUiState by tempViewModel.uiState.collectAsState()
-    var currentTemperature = tempUiState.currentTemperature
-    var currentTempTypeOposite = tempUiState.currentTempTypeOpposite
 
+    TempLayout (
+        currentTemperature = tempUiState.currentTemperature,
+        tempTypeOpposite = tempUiState.currentTempTypeOpposite,
+        tempType = tempUiState.currentTempType,
+        convertTempInput = { tempViewModel.convertTempImput(it) },
+        switchChange = { tempViewModel.switchChange() },
+        switchTemp = tempUiState.switchTemp
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TempLayout(
+    currentTemperature: String,
+    tempTypeOpposite: String,
+    tempType: String,
+    convertTempInput: (String) -> Unit,
+    switchChange: () -> Unit,
+    switchTemp: Boolean
+){
     var fieldValue by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
 
@@ -72,12 +89,12 @@ fun TempScreen(
                 )
             )
             Text(
-                text = tempUiState.currentTempType,
+                text = tempType,
                 fontSize = 30.sp
             )
         }
         Text(
-            text = currentTemperature + currentTempTypeOposite,
+            text = currentTemperature + tempTypeOpposite, // "20" + "ºC"
             fontSize = 30.sp
         )
         Row(
@@ -89,10 +106,10 @@ fun TempScreen(
                 modifier = Modifier.padding(10.dp)
             )
             Switch(
-                checked = tempViewModel.isFahrenheit,
+                checked = switchTemp,
                 onCheckedChange = {
-                    tempViewModel.switchChange()
-                    tempViewModel.convertTempImput(fieldValue)
+                    switchChange()
+                    convertTempInput(fieldValue)
                 }
             )
             Text(
@@ -101,7 +118,7 @@ fun TempScreen(
             )
         }
         Button(
-            onClick = { tempViewModel.convertTempImput(fieldValue) }
+            onClick = { convertTempInput(fieldValue) }
         )
         {
             Text(stringResource(R.string.convert_temperature))
