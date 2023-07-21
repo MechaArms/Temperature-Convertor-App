@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.update
 import kotlin.math.roundToInt
 
 class TempViewModel : ViewModel(){
-    var isFahrenheit by mutableStateOf(true)
+    private var isFahrenheit by mutableStateOf(true)
     private var result by mutableStateOf("")
 
     private val _uiState = MutableStateFlow(TempUiState())
     val uiState: StateFlow<TempUiState> = _uiState.asStateFlow()
 
-    fun convertTempImput(temp: String) {
+    fun convertTempInput(temp: String) {
 
         try {
             val tempInt = temp.toInt()
@@ -25,24 +25,19 @@ class TempViewModel : ViewModel(){
             if (isFahrenheit) {
                 result = ((tempInt - 32) * 0.5556).roundToInt().toString()
                 _uiState.update { currentState ->
-                    currentState.copy(currentTemperature = result)
-                }
-                _uiState.update { currentState ->
-                    currentState.copy(currentTempType = " ºF")
-                }
-                _uiState.update { currentState ->
-                    currentState.copy(currentTempTypeOpposite = " ºC")
+                    currentState.copy(
+                        currentTemperature = result,
+                        currentTempType = " ºF",
+                        currentTempTypeOpposite = " ºC"
+                    )
                 }
             } else {
                 result = ((tempInt * 1.8) + 32).roundToInt().toString()
                 _uiState.update { currentState ->
-                    currentState.copy(currentTemperature = result)
-                }
-                _uiState.update { currentState ->
-                    currentState.copy(currentTempType = " ºC")
-                }
-                _uiState.update { currentState ->
-                    currentState.copy(currentTempTypeOpposite = " ºF")
+                    currentState.copy(currentTemperature = result,
+                        currentTempType = " ºC",
+                        currentTempTypeOpposite = " ºF"
+                    )
                 }
             }
         } catch (e: Exception) {
@@ -56,7 +51,7 @@ class TempViewModel : ViewModel(){
     fun switchChange() {
         isFahrenheit = !isFahrenheit
         _uiState.update { currentState ->
-            currentState.copy(switchTemp = false)
+            currentState.copy(switchTemp = isFahrenheit)
         }
     }
 }

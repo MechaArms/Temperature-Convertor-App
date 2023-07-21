@@ -41,7 +41,7 @@ fun TempScreen(
         currentTemperature = tempUiState.currentTemperature,
         tempTypeOpposite = tempUiState.currentTempTypeOpposite,
         tempType = tempUiState.currentTempType,
-        convertTempInput = { tempViewModel.convertTempImput(it) },
+        convertTempInput = { tempViewModel.convertTempInput(it) },
         switchChange = { tempViewModel.switchChange() },
         switchTemp = tempUiState.switchTemp
     )
